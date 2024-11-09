@@ -9,13 +9,13 @@ const Brand = () => {
     <div className="phone:p-5 tablet:p-10 laptop:p-14 desktop:p-24">
       {/* --Box */}
       <motion.div
-        initial={{ y: 100 }}
-        animate={{ y: 0 }}
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{
           type: "spring",
-          stiffness: 50,
-          duration: 4,
-          damping: 30,
+          stiffness: 30,
+          damping: 15,
+          duration: 1.5,
         }}
         className="text-center break-words gap-5 md:grid md:grid-cols-3"
       >

@@ -7,22 +7,63 @@ import { motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 
 const ShowResponsive = () => {
-  const ref = useRef(null); // สร้างการอ้างอิงสำหรับองค์ประกอบที่เราจะใช้สังเกตการณ์
-  const [inView, setView] = useState(false); // สร้าง state เพื่อเก็บข้อมูลว่าองค์ประกอบอยู่ในมุมมองหรือไม่
+  const laptopRef = useRef(null);
+  const tabletRef = useRef(null);
+  const phoneRef = useRef(null);
+  const [inViewLaptop, setInViewLaptop] = useState(false);
+  const [inViewTablet, setInViewTablet] = useState(false);
+  const [inViewPhone, setInViewPhone] = useState(false);
 
+  // for Laptop
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setView(entry.isIntersecting); // หากองค์ประกอบเข้าสู่มุมมองจะตั้งค่า inView เป็น true
+        setInViewLaptop(entry.isIntersecting); // หากองค์ประกอบเข้าสู่มุมมองจะตั้งค่า inView เป็น true
       },
       { threshold: 0.1 } // กำหนดให้เริ่มตรวจจับเมื่อองค์ประกอบเข้ามาในมุมมองอย่างน้อย 10%
     );
-    if (ref.current) {
-      observer.observe(ref.current); // สังเกตการณ์องค์ประกอบที่เราอ้างอิงไว้
+    if (laptopRef.current) {
+      observer.observe(laptopRef.current); // สังเกตการณ์องค์ประกอบที่เราอ้างอิงไว้
     }
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current); // หยุดการสังเกตเมื่อองค์ประกอบถูก unmount
+      if (laptopRef.current) {
+        observer.unobserve(laptopRef.current); // หยุดการสังเกตเมื่อองค์ประกอบถูก unmount
+      }
+    };
+  });
+
+  // for tablet
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setInViewTablet(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    if (tabletRef.current) {
+      observer.observe(tabletRef.current);
+    }
+    return () => {
+      if (tabletRef.current) {
+        observer.unobserve(tabletRef.current);
+      }
+    };
+  });
+
+  // for phone
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setInViewPhone(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    if (phoneRef.current) {
+      observer.observe(phoneRef.current);
+    }
+    return () => {
+      if (phoneRef.current) {
+        observer.unobserve(phoneRef.current);
       }
     };
   });
@@ -39,9 +80,9 @@ const ShowResponsive = () => {
         >
           {/* Image-Laptop */}
           <motion.div
-            ref={ref}
+            ref={laptopRef}
             initial={{ opacity: 0, x: 20 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
+            animate={inViewLaptop ? { opacity: 1, x: 0 } : {}}
             transition={{
               duration: 1,
               ease: "easeInOut",
@@ -49,14 +90,14 @@ const ShowResponsive = () => {
             }}
             className="absolute max-w-full h-auto"
           >
-            <img className="" src={ImageLaptop} alt="Image" />
+            <img src={ImageLaptop} alt="Image" />
           </motion.div>
 
           {/* Image-Tablet */}
           <motion.div
-            ref={ref}
+            ref={tabletRef}
             initial={{ opacity: 0, x: -100 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
+            animate={inViewTablet ? { opacity: 1, x: 0 } : {}}
             transition={{
               duration: 1.5,
               ease: "easeInOut",
@@ -69,15 +110,15 @@ const ShowResponsive = () => {
 
           {/* Image-Phone */}
           <motion.div
-            ref={ref}
+            ref={phoneRef}
             initial={{ opacity: 0, x: -100 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
+            animate={inViewPhone ? { opacity: 1, x: 0 } : {}}
             transition={{
               duration: 2,
               ease: "easeInOut",
               staggerChildren: 0.2,
             }}
-            className="absolute max-w-full h-auto phone:left-[77%] phone:top-[51%] tablet:top-[50%] 
+            className="absolute max-w-full h-auto phone:left-[77%] phone:top-[49%] tablet:top-[50%] 
               laptop:top-[49%] desktop:top-[48%] min-[1300px]:top-[49%]"
           >
             <img src={ImagePhone} alt="Image" />

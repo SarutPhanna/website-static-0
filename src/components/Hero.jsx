@@ -23,13 +23,13 @@ const Hero = () => {
       <div className=" phone:flex phone:justify-center phone:items-center">
         {/* ---Box */}
         <motion.div
-          initial={{ y: 30 }}
-          animate={{ y: 0 }}
+          initial={{ scale: 0.9 }}
+          animate={{ scale: 1 }}
           transition={{
             type: "spring",
-            stiffness: 50,
-            damping: 30,
-            duration: 3,
+            stiffness: 20,
+            damping: 10,
+            duration: 1.5,
           }}
           className="relative text-center text-white break-words tablet:w-3/4 laptop:w-3/6 desktop:w-3/6"
         >
