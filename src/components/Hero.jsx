@@ -1,39 +1,63 @@
 import videobghero from "../assets/VideoBgHero.mp4";
+import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { data_hero } from "../../content/hero";
 import { motion } from "framer-motion";
 
 const Hero = () => {
+  const videoRef = useRef(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsInView(true);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (videoRef.current) observer.observe(videoRef.current);
+    return () => {
+      if (videoRef.current) observer.unobserve(videoRef.current);
+    };
+  }, []);
+
   return (
     // -box main
     <section className="relative phone:h-auto phone:p-5 laptop:p-10 laptop:h-auto">
       {/* --box Background*/}
       <div>
         <video
+          ref={videoRef}
           className="absolute bg-cover object-cover bg-no-repeat w-full h-full top-0 left-0 z-[0]"
-          src={videobghero}
+          src={isInView ? videobghero : ""}
           autoPlay
           loop
           muted
+          playsInline
+          preload="auto"
           loading="lazy"
         />
       </div>
       {/* --box background overlay */}
-      <div className="absolute bg-sky-900 bg-opacity-90 w-full h-full top-0 left-0"></div>
+      <div className="absolute bg-sky-900 bg-opacity-90 w-full h-full top-0 left-0 will-change-opacity"></div>
       {/* --box */}
       <section className=" phone:flex phone:justify-center phone:items-center">
         {/* ---box content */}
         <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{
-            type: "spring",
-            stiffness: 30,
-            damping: 15,
-            duration: 1.5,
+            duration: 2,
+            delay: 0.4,
+            ease: "easeOut",
           }}
-          className="relative text-center text-white break-words tablet:w-3/4 laptop:w-3/6 desktop:w-3/6"
+          className="relative text-center text-white break-words tablet:w-3/4 laptop:w-3/6 desktop:w-3/6 will-change-transform"
         >
           <div className="mb-3">
             <span className="font-logoFont phone:text-2xl tablet:text-3xl laptop:text-4xl desktop:text-5xl">

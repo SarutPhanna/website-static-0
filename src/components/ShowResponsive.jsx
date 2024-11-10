@@ -1,6 +1,7 @@
 import ImageLaptop from "../assets/Image_Laptop.png";
 import ImageTablet from "../assets/Image_Tablet.png";
 import ImagePhone from "../assets/Image_Phone.png";
+import { useMemo } from "react";
 import { data_showresponsive } from "../../content/ShowResponsive";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPalette, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
@@ -8,104 +9,79 @@ import { motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 
 const ShowResponsive = () => {
-  const laptopRef = useRef(null);
-  const tabletRef = useRef(null);
-  const phoneRef = useRef(null);
+  const images = useMemo(() => [ImageLaptop, ImageTablet, ImagePhone], []);
+  const refs = [useRef(null), useRef(null), useRef(null)];
   const [inView, setInView] = useState({
     laptop: false,
     tablet: false,
     phone: false,
   });
 
-  // for laptop
+  const transitionSettings = {
+    type: "spring",
+    stiffness: 30,
+    damping: 18,
+    duration: 1.5,
+    delay: 0.3,
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
+        const updatedInView = { ...inView };
         entries.forEach((entry) => {
-          const isVisible = entry.isIntersecting;
-          if (entry.target === laptopRef.current) {
-            setInView((prev) => ({ ...prev, laptop: isVisible }));
-          } else if (entry.target === tabletRef.current) {
-            setInView((prev) => ({ ...prev, tablet: isVisible }));
-          } else if (entry.target === phoneRef.current) {
-            setInView((prev) => ({ ...prev, phone: isVisible }));
+          if (entry.isIntersecting) {
+            if (entry.target === refs[0].current) updatedInView.laptop = true;
+            else if (entry.target === refs[1].current)
+              updatedInView.tablet = true;
+            else if (entry.target === refs[2].current)
+              updatedInView.phone = true;
           }
         });
+        setInView(updatedInView);
       },
-      { threshold: 0.1 }
+      { threshold: 0.2 }
     );
 
-    if (laptopRef.current) observer.observe(laptopRef.current);
-    if (tabletRef.current) observer.observe(tabletRef.current);
-    if (phoneRef.current) observer.observe(phoneRef.current);
-
-    return () => {
-      if (laptopRef.current) observer.unobserve(laptopRef.current);
-      if (tabletRef.current) observer.unobserve(tabletRef.current);
-      if (phoneRef.current) observer.unobserve(phoneRef.current);
-    };
-  }, []);
+    refs.forEach((ref) => observer.observe(ref.current));
+    return () => refs.forEach((ref) => observer.unobserve(ref.current));
+  }, [inView]);
 
   return (
     // -box main
     <section className="phone:p-5 tablet:p-10 laptop:p-14 desktop:p-20">
       {/* --box control layout */}
       <section className="break-words md:grid md:grid-cols-2 md:gap-8">
-        {/* ---box content image */}
-        <div
-          className="relative flex justify-center items-center 
-          phone:h-[40vh] tablet:h-[40vh] desktop:h-[65vh] min-[500px]:h-[55vh]"
-        >
-          {/* image-laptop */}
-          <figure className="absolute max-w-full h-auto">
-            <motion.div
-              ref={laptopRef}
-              initial={{ opacity: 0, x: 20 }}
-              animate={inView.laptop ? { opacity: 1, x: 0 } : {}}
-              transition={{
-                duration: 1,
-                ease: "easeInOut",
-                staggerChildren: 0.2,
-              }}
+        {/* ---box images */}
+        <div className="relative flex justify-center items-center phone:h-[40vh] tablet:h-[40vh] desktop:h-[65vh] min-[500px]:h-[55vh]">
+          {images.map((image, index) => (
+            <figure
+              key={index}
+              className={`absolute max-w-full h-auto ${
+                index === 1 ? "phone:left-[50%]" : ""
+              } ${
+                index === 2
+                  ? "phone:left-[77%] phone:top-[49%] tablet:top-[50%] laptop:top-[49%] desktop:top-[48%]"
+                  : ""
+              }`}
             >
-              <img loading="lazy" src={ImageLaptop} alt="Image" />
-            </motion.div>
-          </figure>
-
-          {/* image-tablet */}
-          <figure className="absolute max-w-full phone:left-[50%]">
-            <motion.div
-              ref={tabletRef}
-              initial={{ opacity: 0, x: -100 }}
-              animate={inView.laptop ? { opacity: 1, x: 0 } : {}}
-              transition={{
-                duration: 1.5,
-                ease: "easeInOut",
-                staggerChildren: 0.2,
-              }}
-            >
-              <img loading="lazy" src={ImageTablet} alt="Image" />
-            </motion.div>
-          </figure>
-
-          {/* image-phone */}
-          <figure
-            className="absolute max-w-full h-auto phone:left-[77%] phone:top-[49%] tablet:top-[50%] 
-              laptop:top-[49%] desktop:top-[48%] min-[1300px]:top-[49%]"
-          >
-            <motion.div
-              ref={phoneRef}
-              initial={{ opacity: 0, x: -100 }}
-              animate={inView.phone ? { opacity: 1, x: 0 } : {}}
-              transition={{
-                duration: 2,
-                ease: "easeInOut",
-                staggerChildren: 0.2,
-              }}
-            >
-              <img loading="lazy" src={ImagePhone} alt="Image" />
-            </motion.div>
-          </figure>
+              <motion.div
+                ref={refs[index]}
+                initial={{ opacity: 0, x: index === 0 ? 20 : -100 }}
+                animate={
+                  inView[
+                    index === 0 ? "laptop" : index === 1 ? "tablet" : "phone"
+                  ]
+                    ? { opacity: 1, x: 0 }
+                    : {}
+                }
+                transition={transitionSettings}
+                style={{ willChange: "opacity, transform" }}
+              >
+                <img loading="lazy" src={image} alt="Image" />
+              </motion.div>
+            </figure>
+          ))}
         </div>
 
         {/* ---box content text */}

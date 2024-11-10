@@ -1,5 +1,3 @@
-import { head, title } from "framer-motion/client";
-
 export const data_showresponsive = {
   head_main: "Responsive Design",
   head1: "Ready to support all screens",
