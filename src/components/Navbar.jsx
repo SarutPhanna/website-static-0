@@ -2,53 +2,35 @@ import React, { useState } from "react";
 
 const Navbar = () => {
   const [MenuOpen, SetMenuOpen] = useState(false);
-  const togglemenu = () => {
+  const toggleMenu = () => {
     SetMenuOpen(!MenuOpen);
   };
   return (
-    // -Box
-    <div className="sticky top-0 left-0 w-full z-50 shadow-2xl break-words bg-white phone:p-5 laptop:px-10 desktop:px-20">
+    // -box main
+    <section className="sticky top-0 left-0 w-full z-50 shadow-2xl break-words bg-white phone:p-5 laptop:px-10 desktop:px-20">
       {/* --Box */}
-      <div className="flex justify-between h-auto">
-        {/* ---Box */}
+      <section className="flex justify-between h-auto">
+        {/* ---box logo */}
         <div className="font-logoFont">
           <span className="text-xl font-semibold">SARUT.</span>
           <span className="text-xl text-sky-500 font-semibold">DEV</span>
         </div>
-        {/* ---Box Menu For Laptop Up */}
+        {/* ---box menu for laptop up */}
         <ul className="hidden font-semibold text-gray-600 laptop:flex laptop:items-center laptop:gap-8">
-          <li className="">
-            <a href="http://" target="_blank" rel="noopener noreferrer">
-              HOMEPAGE
-            </a>
-          </li>
-          <li className="">
-            <a href="http://" target="_blank" rel="noopener noreferrer">
-              ABOUT
-            </a>
-          </li>
-          <li className="">
-            <a href="http://" target="_blank" rel="noopener noreferrer">
-              FEATURES
-            </a>
-          </li>
-          <li className="">
-            <a href="http://" target="_blank" rel="noopener noreferrer">
-              WEBSITE
-            </a>
-          </li>
-          <li className="">
-            <a href="http://" target="_blank" rel="noopener noreferrer">
-              CONTACT
-            </a>
-          </li>
+          {["HOMEPAGE", "FEATURES", "WEBSITE", "CONTACT"].map((item) => (
+            <li key={item}>
+              <a href="http://" target="_blank" rel="noopener noreferrer">
+                {item}
+              </a>
+            </li>
+          ))}
         </ul>
 
-        {/* ---Box Menu Button */}
+        {/* ---box menu button */}
         <button
           id="menu-toggle"
           className="text-black laptop:hidden"
-          onClick={togglemenu}
+          onClick={toggleMenu}
         >
           <svg
             fill="none"
@@ -62,8 +44,8 @@ const Navbar = () => {
             <path d="M4 6h16M4 12h16M4 18h16"></path>
           </svg>
         </button>
-      </div>
-      {/* --Box Menu For Phone Up */}
+      </section>
+      {/* --box menu for phone up */}
       <ul
         className={`font-semibold flex flex-col justify-around text-sm text-start mt-16
           absolute top-0 left-0 right-0 w-full h-[60vh] bg-gray-800 text-white z-10 
@@ -72,33 +54,15 @@ const Navbar = () => {
           }
          laptop:hidden`}
       >
-        <li className="my-3 ml-5">
-          <a href="http://" target="_blank" rel="noopener noreferrer">
-            HOMEPAGE
-          </a>
-        </li>
-        <li className="my-3 ml-5">
-          <a href="http://" target="_blank" rel="noopener noreferrer">
-            ABOUT
-          </a>
-        </li>
-        <li className="my-3 ml-5">
-          <a href="http://" target="_blank" rel="noopener noreferrer">
-            FEATURES
-          </a>
-        </li>
-        <li className="my-3 ml-5">
-          <a href="http://" target="_blank" rel="noopener noreferrer">
-            WEBSITE
-          </a>
-        </li>
-        <li className="my-3 ml-5">
-          <a href="http://" target="_blank" rel="noopener noreferrer">
-            CONTACT
-          </a>
-        </li>
+        {["HOMEPAGE", "FEATURES", "WEBSITE", "CONTACT"].map((item) => (
+          <li className="my-3 ml-5" key={item}>
+            <a href="http://" target="_blank" rel="noopener noreferrer">
+              {item}
+            </a>
+          </li>
+        ))}
       </ul>
-    </div>
+    </section>
   );
 };
 
