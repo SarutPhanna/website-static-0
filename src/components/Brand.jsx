@@ -24,7 +24,7 @@ const Brand = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{
               ease: "easeInOut",
-              delay: index * 0.2,
+              delay: index * 1,
               duration: 1.5,
             }}
             className="mb-5"

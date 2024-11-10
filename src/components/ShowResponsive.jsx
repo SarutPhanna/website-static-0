@@ -22,7 +22,7 @@ const ShowResponsive = () => {
     stiffness: 30,
     damping: 18,
     duration: 1.5,
-    delay: 0.3,
+    delay: 1,
   };
 
   useEffect(() => {
